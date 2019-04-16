@@ -1,0 +1,34 @@
+{
+  "name": "leetcode-mvp",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "next build",
+    "start": "cross-env NODE_ENV=production node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "next": "^8.0.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "description": "a mvp realization of leetcode.",
+  "version": "1.0.0",
+  "main": "server.js",
+  "devDependencies": {
+    "cross-env": "^5.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/postor/leetcode-mvp.git"
+  },
+  "keywords": [
+    "leetcode",
+    "mvp"
+  ],
+  "author": "postor@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/postor/leetcode-mvp/issues"
+  },
+  "homepage": "https://github.com/postor/leetcode-mvp#readme"
+}
