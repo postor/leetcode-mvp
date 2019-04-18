@@ -6,7 +6,7 @@ const Submitions = ({ code, problem }) => {
   const [answers, setAnswers] = useState([])
 
   useEffect(() => {
-    (async () => setAnswers(await getAnswers()))()
+    (async () => setAnswers(await getAnswers(problem.id)))()
   }, [])
 
   useEffect(() => {
@@ -28,12 +28,12 @@ const Submitions = ({ code, problem }) => {
       if (!answers.length) return (<h4>no submition yet!</h4>)
       return (<ul className="collection with-header">
         <li className="collection-header"><h4>Submitions</h4></li>
-        {answers.map(({ rtnCode, stdout }, i) => (<li key={i} className="collection-item">
-          <div title={stdout} style={{
+        {answers.map(({ rtnCode, stderr }, i) => (<li key={i} className="collection-item">
+          <div title={stderr} style={{
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
             color: rtnCode ? 'red' : 'green',
-          }} >{rtnCode ? stdout : 'pass'}</div>
+          }} >{rtnCode ? stderr : 'pass'}</div>
         </li>))}
       </ul>)
     })()}
@@ -44,9 +44,12 @@ const Submitions = ({ code, problem }) => {
 export default Submitions
 
 async function submit(key, code) {
+  const r = await request.post('/runner', { key, code })
+
   return {
-    rtnCode: 0,
-    stdout: 'hello'
+    ...r.data,
+    rtnCode: r.data.code,
+    code,
   }
 }
 

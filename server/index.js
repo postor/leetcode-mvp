@@ -12,6 +12,8 @@ app.prepare().then(() => {
   const server = express()
   server.use('/assets/materialize', express.static(
     join(__dirname, '..', 'node_modules', 'materialize-css', 'dist')))
+  server.use('/api/runner', proxy(
+    process.env.RUNNER_HOST || 'http://192.168.5.43:3002'))
   server.use('/api', proxy(
     process.env.SERVICES_HOST || 'http://localhost:3001'))
 

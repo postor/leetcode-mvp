@@ -2,6 +2,7 @@ import { useState } from 'react'
 import request from '../lib/request'
 import layout from '../components/layout'
 import Description from '../components/problem/Description'
+import Submitions from '../components/problem/Submitions'
 import Code from '../components/problem/Code'
 
 const tabs = [
@@ -13,7 +14,7 @@ const tabs = [
     Comp: () => false,
   }, {
     text: 'Submitions',
-    Comp: () => false,
+    Comp: Submitions,
   }, {
     text: 'Discuss',
     Comp: () => false,
