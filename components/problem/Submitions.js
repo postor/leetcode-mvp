@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useReducer } from 'react'
 import request from '../../lib/request'
+import updateProblem from '../../lib/update-problem'
 
 const Submitions = ({ code, problem }) => {
   const [loading, setLoading] = useState(false)
-  const [answers, setAnswers] = useState([])
+  const [answers, dispatch] = useReducer(reducer, [])
 
   useEffect(() => {
-    (async () => setAnswers(await getAnswers(problem.id)))()
+    (async () => dispatch({ update: await getAnswers(problem.id) }))()
   }, [])
 
   useEffect(() => {
@@ -16,7 +17,9 @@ const Submitions = ({ code, problem }) => {
       setLoading(true)
       const result = await submit(problem.key, code)
       const newAnswer = await addAnswer(problem.id, result, code)
-      setAnswers([newAnswer, ...answers])
+      await updateProblem(problem._id, { done: !result.rtnCode })
+      dispatch({ add: newAnswer })
+      setLoading(false)
     })()
   }, [code])
 
@@ -50,11 +53,15 @@ async function submit(key, code) {
     ...r.data,
     rtnCode: r.data.code,
     code,
+    createdAt: new Date() * 1,
   }
 }
 
 async function getAnswers(id) {
-  const r = await request.post('/answers/find', { query: { problemId: parseInt(id) } })
+  const r = await request.post('/answers/find', {
+    query: { problemId: parseInt(id) },
+    sort: '-createdAt'
+  })
   return r.data
 }
 
@@ -65,4 +72,11 @@ async function addAnswer(problemId, result, code) {
     code,
   })
   return r.data
+}
+
+function reducer(state, action) {
+  if (action.add)
+    return [action.add, ...state]
+  if (action.update)
+    return action.update
 }

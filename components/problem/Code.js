@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { debounce } from 'throttle-debounce'
-import request from '../../lib/request'
+import updateProblem from '../../lib/update-problem'
 
 const SAVE_THROTTLE = 5 * 1000   //5sec
 
@@ -36,8 +36,5 @@ const Code = ({ problem, submitCode }) => {
 export default Code
 
 function saveCode(_id, currentAnswer) {
-  request.post('/problems/update', {
-    _id,
-    currentAnswer
-  })
+  return updateProblem(_id, { currentAnswer })
 }
