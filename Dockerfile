@@ -4,7 +4,11 @@ WORKDIR /app
 
 COPY package.json /app/package.json
 
-RUN npm i && npm run build
+RUN npm i 
+
+COPY . /app
+
+RUN npm run build
 
 ENV NODE_ENV=production
 
