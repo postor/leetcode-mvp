@@ -2,7 +2,7 @@ import { useState, useEffect, useReducer } from 'react'
 import request from '../../lib/request'
 import updateProblem from '../../lib/update-problem'
 
-const Submitions = ({ code, problem }) => {
+const Submitions = ({ codeLang = {}, problem }) => {
   const [loading, setLoading] = useState(false)
   const [answers, dispatch] = useReducer(reducer, [])
 
@@ -12,16 +12,17 @@ const Submitions = ({ code, problem }) => {
 
   useEffect(() => {
     (async () => {
-      if (!code) return
+      const { code, language } = codeLang
+      if (!code || !language) return
       if (loading) return
       setLoading(true)
-      const result = await submit(problem.key, code)
-      const newAnswer = await addAnswer(problem.id, result, code)
+      const result = await submit(problem.key, code, language)
+      const newAnswer = await addAnswer(problem.id, result, code, language)
       await updateProblem(problem._id, { done: !result.rtnCode })
       dispatch({ add: newAnswer })
       setLoading(false)
     })()
-  }, [code])
+  }, [codeLang])
 
   return (<div>
     {loading && (<div className="progress">
@@ -46,8 +47,8 @@ const Submitions = ({ code, problem }) => {
 
 export default Submitions
 
-async function submit(key, code) {
-  const r = await request.post('/runner', { key, code })
+async function submit(key, code, language) {
+  const r = await request.post('/runner', { key, code, language })
 
   return {
     ...r.data,
@@ -65,11 +66,12 @@ async function getAnswers(id) {
   return r.data
 }
 
-async function addAnswer(problemId, result, code) {
+async function addAnswer(problemId, result, code, language) {
   const r = await request.post('/answers/create', {
     ...result,
     problemId,
     code,
+    language,
   })
   return r.data
 }
