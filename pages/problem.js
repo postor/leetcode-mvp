@@ -23,7 +23,7 @@ const tabs = [
 
 const Problem = ({ problem, id }) => {
   const [tabIndex, setTabIndex] = useState(0)
-  const [code, setCode] = useState('')
+  const [codeLang, setCodeLang] = useState({})
   const { Comp } = tabs[tabIndex]
   if (!problem) return (<h1>problem #{id} not found!</h1>)
   return (<div className="row">
@@ -41,14 +41,14 @@ const Problem = ({ problem, id }) => {
           </ul>
         </div>
         <div style={{ height: 15, width: "100%", clear: 'both' }}></div>
-        <Comp problem={problem} code={code} />
+        <Comp problem={problem} codeLang={codeLang} />
       </div>
     </div>
     <div className="col l6">
       <Code
         problem={problem}
-        submitCode={(code) => {
-          setCode(code)
+        submitCode={(code, language) => {
+          setCodeLang({ code, language })
           setTabIndex(2)
         }}
       />
