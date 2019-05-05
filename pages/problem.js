@@ -47,7 +47,6 @@ const Problem = ({ problem, id }) => {
     <div className="col l6">
       <Code
         problem={problem}
-        code={code}
         submitCode={(code) => {
           setCode(code)
           setTabIndex(2)
